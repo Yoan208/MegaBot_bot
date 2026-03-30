@@ -1,7 +1,20 @@
 import os
 import telebot
 from flask import Flask, request
-from mega_local import Mega   # usamos la versión local corregida
+from mega import Mega
+import base64
+
+# =========================
+# PARCHE BASE64
+# =========================
+
+def safe_b64decode(data: str) -> bytes:
+    # Rellenar con '=' hasta múltiplo de 4
+    data += "=" * ((4 - len(data) % 4) % 4)
+    return base64.b64decode(data, validate=False)
+
+# Sobrescribir la función en la librería mega.py
+base64.b64decode = safe_b64decode
 
 # =========================
 # CONFIGURACIÓN
@@ -89,6 +102,7 @@ if __name__ == "__main__":
     bot.remove_webhook()
     bot.set_webhook(url="https://TU-SERVICIO.onrender.com/" + TOKEN)
     app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
+
 
 
 
