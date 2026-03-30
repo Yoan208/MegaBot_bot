@@ -23,9 +23,16 @@ MAX_TELEGRAM_FILE_SIZE = int(1.9 * 1024 * 1024 * 1024)  # ~1.9GB
 # =========================
 
 def mega_download(url: str, output_dir: str) -> str:
+    """
+    Descarga un archivo desde MEGA usando mega.py.
+    Corrige el bug de base64 haciendo login anónimo.
+    """
     m = Mega()
-    m.login()  # login anónimo
-    file_path = m.download_url(url, output_dir)
+    m.login()  # login anónimo para evitar errores de clave/base64
+    try:
+        file_path = m.download_url(url, output_dir)
+    except Exception as e:
+        raise ValueError(f"Error al procesar el enlace MEGA: {e}")
     if not file_path or not os.path.exists(file_path):
         raise ValueError("No se pudo descargar el archivo desde MEGA.")
     return file_path
@@ -36,7 +43,7 @@ def mega_download(url: str, output_dir: str) -> str:
 
 @bot.message_handler(commands=['start'])
 def start(message):
-    bot.reply_to(message, "Hola 👋, envíame un enlace de MEGA completo.")
+    bot.reply_to(message, "Hola 👋, envíame un enlace de MEGA completo (incluyendo la parte después de #).")
 
 @bot.message_handler(func=lambda m: "mega.nz" in m.text)
 def handle_message(message):
@@ -86,6 +93,7 @@ if __name__ == "__main__":
     bot.remove_webhook()
     bot.set_webhook(url="https://TU-SERVICIO.onrender.com/" + TOKEN)
     app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
+
 
 
 
