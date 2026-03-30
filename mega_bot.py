@@ -24,8 +24,13 @@ def mega_download(url: str, output_dir: str) -> str:
     y devuelve la ruta del archivo descargado.
     """
     m = Mega()
-    file = m.download_url(url, output_dir)
-    return file
+    try:
+        file_path = m.download_url(url, output_dir)
+        if not file_path or not os.path.exists(file_path):
+            raise ValueError("No se pudo descargar el archivo desde MEGA.")
+        return file_path
+    except Exception as e:
+        raise RuntimeError(f"Error al procesar el enlace MEGA: {e}")
 
 # =========================
 # HANDLERS
@@ -35,12 +40,12 @@ def mega_download(url: str, output_dir: str) -> str:
 def start(message):
     bot.reply_to(
         message,
-        "Hola 👋\n\nEnvíame un enlace de MEGA y te enviaré el archivo."
+        "Hola 👋\n\nEnvíame un enlace de MEGA (completo, con la clave después del #) y te enviaré el archivo."
     )
 
 @bot.message_handler(commands=['help'])
 def help_cmd(message):
-    bot.reply_to(message, "Solo envíame un enlace de MEGA (mega.nz).")
+    bot.reply_to(message, "Formato correcto de enlace: https://mega.nz/file/<ID>#<CLAVE>")
 
 @bot.message_handler(func=lambda m: True)
 def handle_message(message):
@@ -95,4 +100,5 @@ def handle_message(message):
 # =========================
 
 bot.infinity_polling()
+
 
