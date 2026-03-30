@@ -20,7 +20,7 @@ MAX_TELEGRAM_FILE_SIZE = int(1.9 * 1024 * 1024 * 1024)  # ~1.9GB
 
 def mega_download(url: str, output_dir: str) -> str:
     """
-    Descarga un archivo desde MEGA usando mega.py-unofficial
+    Descarga un archivo desde MEGA usando mega.py
     y devuelve la ruta del archivo descargado.
     """
     m = Mega()
@@ -95,3 +95,4 @@ def handle_message(message):
 # =========================
 
 bot.infinity_polling()
+
