@@ -5,15 +5,20 @@ from mega import Mega
 import base64
 
 # =========================
-# PARCHE BASE64
+# PARCHE BASE64 ROBUSTO
 # =========================
 
-def safe_b64decode(data: str) -> bytes:
+def safe_b64decode(data: str, *args, **kwargs) -> bytes:
+    # Ignorar 'validate' si viene en kwargs
+    if 'validate' in kwargs:
+        kwargs.pop('validate')
     # Rellenar con '=' hasta múltiplo de 4
     data += "=" * ((4 - len(data) % 4) % 4)
-    return base64.b64decode(data, validate=False)
+    return base64._b64decode(data, *args, **kwargs)
 
-# Sobrescribir la función en la librería mega.py
+# Guardar referencia original
+base64._b64decode = base64.b64decode
+# Sobrescribir con versión segura
 base64.b64decode = safe_b64decode
 
 # =========================
