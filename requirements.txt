@@ -1,2 +1,2 @@
 pyTelegramBotAPI
-mega.py
+git+https://github.com/odwyersoftware/mega.py
