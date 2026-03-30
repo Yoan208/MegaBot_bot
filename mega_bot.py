@@ -20,11 +20,10 @@ MAX_TELEGRAM_FILE_SIZE = int(1.9 * 1024 * 1024 * 1024)  # ~1.9GB
 
 def mega_download(url: str, output_dir: str) -> str:
     """
-    Descarga un archivo desde MEGA usando la librería mega.py
+    Descarga un archivo desde MEGA usando mega.py-unofficial
     y devuelve la ruta del archivo descargado.
     """
     m = Mega()
-    # Si tu enlace es público, no necesitas login
     file = m.download_url(url, output_dir)
     return file
 
