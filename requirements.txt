@@ -1,2 +1,2 @@
 pyTelegramBotAPI
-mega.py-unofficial
+mega.py
