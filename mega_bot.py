@@ -20,17 +20,15 @@ MAX_TELEGRAM_FILE_SIZE = int(1.9 * 1024 * 1024 * 1024)  # ~1.9GB
 
 def mega_download(url: str, output_dir: str) -> str:
     """
-    Descarga un archivo desde MEGA usando mega.py
+    Descarga un archivo desde MEGA usando mega.py (GitHub version)
     y devuelve la ruta del archivo descargado.
     """
     m = Mega()
-    try:
-        file_path = m.download_url(url, output_dir)
-        if not file_path or not os.path.exists(file_path):
-            raise ValueError("No se pudo descargar el archivo desde MEGA.")
-        return file_path
-    except Exception as e:
-        raise RuntimeError(f"Error al procesar el enlace MEGA: {e}")
+    m.login()  # login anónimo para evitar errores de base64
+    file_path = m.download_url(url, output_dir)
+    if not file_path or not os.path.exists(file_path):
+        raise ValueError("No se pudo descargar el archivo desde MEGA.")
+    return file_path
 
 # =========================
 # HANDLERS
@@ -100,5 +98,6 @@ def handle_message(message):
 # =========================
 
 bot.infinity_polling()
+
 
 
