@@ -1,7 +1,7 @@
 import os
 import telebot
 from flask import Flask, request
-from mega import Mega
+from mega_local import Mega   # usamos la versión local corregida
 
 # =========================
 # CONFIGURACIÓN
@@ -23,12 +23,8 @@ MAX_TELEGRAM_FILE_SIZE = int(1.9 * 1024 * 1024 * 1024)  # ~1.9GB
 # =========================
 
 def mega_download(url: str, output_dir: str) -> str:
-    """
-    Descarga un archivo desde MEGA usando mega.py.
-    Corrige el bug de base64 haciendo login anónimo.
-    """
     m = Mega()
-    m.login()  # login anónimo para evitar errores de clave/base64
+    m.login()  # login anónimo
     try:
         file_path = m.download_url(url, output_dir)
     except Exception as e:
@@ -93,6 +89,7 @@ if __name__ == "__main__":
     bot.remove_webhook()
     bot.set_webhook(url="https://TU-SERVICIO.onrender.com/" + TOKEN)
     app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
+
 
 
 
