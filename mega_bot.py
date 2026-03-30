@@ -3,7 +3,7 @@ import telebot
 from flask import Flask, request
 from mega import Mega
 
-TOKEN = os.getenv("TOKEN")
+TOKEN = os.getenv("8766885049:AAEldPw0-muP__77qd3NC1z92CJK8PVQbUw")
 bot = telebot.TeleBot(TOKEN)
 app = Flask(__name__)
 
